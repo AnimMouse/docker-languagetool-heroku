@@ -1,8 +1,8 @@
 FROM openjdk:14-alpine
 
-MAINTAINER Silvio Fricke <silvio.fricke@gmail.com>
+# MAINTAINER Silvio Fricke <silvio.fricke@gmail.com>
 
-RUN apk add --no-cache libgomp gcompat libstdc++
+RUN apk add --no-cache libgomp gcompat libstdc++ unzip
 
 ENV VERSION 5.0
 RUN wget https://www.languagetool.org/download/LanguageTool-$VERSION.zip && \
@@ -14,4 +14,4 @@ WORKDIR /LanguageTool-$VERSION
 ADD misc/start.sh /start.sh
 CMD [ "sh", "/start.sh" ]
 USER nobody
-EXPOSE 8010
+# EXPOSE 8010
