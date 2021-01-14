@@ -1,57 +1,36 @@
-
-# Introduction
-
+# LanguageTool server on Heroku
 [LanguageTool] is an Open Source proof­reading software for English, French,
 German, Polish, and more than 20 other languages.
 
-You can use the LanguageTools with a [firefox-plugin].
+You can use the LanguageTool with a [firefox-plugin].
 
-This is a Dockerfile to get the languagetools running on a system without java.
+This is a Dockerfile made to run on Heroku.
+
+Based on [silvio/docker-languagetool](https://github.com/silvio/docker-languagetool)
 
 [LanguageTool]: https://www.languagetool.org/
 [firefox-plugin]: https://addons.mozilla.org/firefox/addon/languagetoolfx/
 
-# Usage
+# Heroku Deployment
+## Deploy by building it on Heroku's server
+You need Heroku CLI
 
-The Server is running on port 8010, this port should exposed.
+1. Clone this repo
+2. Create an app on Heroku
+3. Set git remote to Heroku `heroku git:remote -a  your-app-name`
+4. Set stack to container `heroku stack:set container -a your-app-name`
+5. Deploy to Heroku `git push heroku master`
 
-    $ docker pull silviof/docker-languagetool
-    [...]
-    $ docker run --rm -p 8010:8010 silviof/docker-languagetool
+## Deploy by building it on your computer
+You need Heroku CLI & Docker
 
-Or you run it in background via `-d`-option.
-
-Run with no minimum rights and RAM
-```
-docker run --name languagetool \
-                        --cap-drop=ALL \
-                        --user=65534:65534 \
-                        --read-only \
-                        --mount type=bind,src=/tmp/languagetool/tmp,dst=/tmp \
-                        -p 127.0.0.1:8010:8010 \
-                        --memory 412m --memory-swap 200m \
-                        -e EXTRAOPTIONS="-Xmx382M" \
-                        silviof/docker-languagetool:latest
-```
+1. Clone this repo
+2. Create an app on Heroku
+3. Build the image and push to Container Registry `heroku container:push web -a your-app-name`
+4. Release the image `heroku container:release web`
 
 ## ngram support
 
-To support [ngrams] you need an additional volume or directory mounted to the
-`/ngrams` directory. For that add a `-v` to the `docker run`-command.
-
-    docker run ... -v /path/to/ngrams:/ngrams ...
-
-[ngrams]: http://wiki.languagetool.org/finding-errors-using-n-gram-data
-
-
-Download English ngrams with the commands:
-
-    mkdir ngrams
-    wget https://languagetool.org/download/ngram-data/ngrams-en-20150817.zip
-    (cd ngrams && unzip ../ngrams-en-20150817.zip)
-    rm -f ngrams-en-20150817.zip
-
-
-One can use them using web browser plugin "Local server (localhost)" setting by running:
-
-    docker run -d --name languagetool -p 127.0.0.1:8081:8010 -v `pwd`/ngrams:/ngrams:ro --restart=unless-stopped silviof/docker-languagetool
+The program will automatically download ngram while the app is running. (see misc/start.sh)
+Depending on the speed of Heroku & LanguageTool's server, ngram will take a while.
+As Heroku file system is ephemeral, once the app is restarted, the ngram will be deleted and need to download again on next start.
