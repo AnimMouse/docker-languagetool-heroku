@@ -1,7 +1,5 @@
 FROM openjdk:14-alpine
 
-# MAINTAINER Silvio Fricke <silvio.fricke@gmail.com>
-
 RUN apk add --no-cache libgomp gcompat libstdc++ unzip
 
 ENV VERSION 5.3

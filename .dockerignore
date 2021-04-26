@@ -1,9 +1,8 @@
 *.swp
-*.zip
 .dockerignore
 .git
 .gitignore
-.travis.yml
-Makefile
+heroku.yml
 ngrams
-readme.md
+README.md
+LICENSE
