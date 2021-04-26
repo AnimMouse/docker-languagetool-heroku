@@ -11,7 +11,6 @@ RUN wget https://www.languagetool.org/download/LanguageTool-$VERSION.zip && \
 
 WORKDIR /LanguageTool-$VERSION
 
-ADD misc/start.sh /start.sh
+ADD /start.sh /start.sh
 CMD [ "sh", "/start.sh" ]
 USER nobody
-# EXPOSE 8010
